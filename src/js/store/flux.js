@@ -1,18 +1,16 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
-      demo: [
-        {
-          title: "FIRST",
-          background: "white",
-          initial: "white",
-        },
-        {
-          title: "SECOND",
-          background: "white",
-          initial: "white",
-        },
-      ],
+      urlBase: "https://assets.breatheco.de/apis/fake/contact",
+      demo: {
+        name: "Thomas Cruise Mapother IV",
+        location: "USA",
+        phoneNumber: "1-800-notarealnumber.com",
+        email: "tomcruise@gmail.com",
+        imgUrl:
+          "https://media.revistavanityfair.es/photos/60e82bd2af2c957f3efefd50/master/w_1600%2Cc_limit/246523.jpg",
+      },
+      users: [],
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -37,6 +35,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 
         //reset the global store
         setStore({ demo: demo });
+      },
+      createUser: async () => {
+        try {
+          let response = await fetch(`${getStore().urlBase}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              full_name: "Test name",
+              email: "testjz@gmail.com",
+              agenda_slug: "jz_agenda",
+              address: "address",
+              phone: "0000000000",
+            }),
+          });
+        } catch (err) {
+          console.log(err);
+        }
       },
     },
   };
