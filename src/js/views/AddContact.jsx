@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext.js";
 
 const AddContact = () => {
+  const { actions } = useContext(Context);
+  async function handleCreateUser() {
+    let nameInput = document.getElementById("nameInput");
+    let emailInput = document.getElementById("emailInput");
+    let phoneInput = document.getElementById("phoneInput");
+    let addressInput = document.getElementById("addressInput");
+    actions.createUser(
+      nameInput.value,
+      emailInput.value,
+      phoneInput.value,
+      addressInput.value
+    );
+  }
   return (
     <>
       <div className="container">
@@ -12,7 +26,8 @@ const AddContact = () => {
               Name
             </label>
             <input
-              type="email"
+              type="name"
+              required
               className="form-control"
               id="nameInput"
               placeholder="John Doe"
@@ -24,6 +39,7 @@ const AddContact = () => {
             </label>
             <input
               type="email"
+              required
               className="form-control"
               id="emailInput"
               placeholder="name@example.com"
@@ -34,7 +50,8 @@ const AddContact = () => {
               Phone number
             </label>
             <input
-              type="email"
+              type="number"
+              required
               className="form-control"
               id="phoneInput"
               placeholder="000-000-0000"
@@ -46,6 +63,7 @@ const AddContact = () => {
             </label>
             <input
               type="email"
+              required
               className="form-control"
               id="addressInput"
               placeholder="Maracaibo, Zulia, VE"
@@ -53,7 +71,11 @@ const AddContact = () => {
           </div>
         </div>
         <div className="row d-flex justify-content-end">
-          <button type="button" className="col-2 btn btn-primary">
+          <button
+            type="button"
+            className="col-2 btn btn-primary"
+            onClick={() => handleCreateUser()}
+          >
             Add contact
           </button>
           <button type="button" className="col-2 btn btn-success ms-3 me-2">
