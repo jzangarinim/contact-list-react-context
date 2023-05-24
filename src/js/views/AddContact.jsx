@@ -1,14 +1,30 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 
 const AddContact = () => {
+  const location = useLocation();
+  const { edit, id, name, address, phone, email } = location.state;
   const { actions } = useContext(Context);
-  async function handleCreateUser() {
-    let nameInput = document.getElementById("nameInput");
-    let emailInput = document.getElementById("emailInput");
-    let phoneInput = document.getElementById("phoneInput");
-    let addressInput = document.getElementById("addressInput");
+  let nameInput = document.getElementById("nameInput");
+  let emailInput = document.getElementById("emailInput");
+  let phoneInput = document.getElementById("phoneInput");
+  let addressInput = document.getElementById("addressInput");
+
+  /*   nameInput?.value = name;
+  emailInput?.value = email;
+  phoneInput?.value = phone;
+  addressInput?.value = address;  */
+
+  function handleDecide() {
+    if (edit == false) {
+      handleCreateUser();
+    } else {
+      handleEditUser();
+    }
+  }
+
+  function handleCreateUser() {
     actions.createUser(
       nameInput.value,
       emailInput.value,
@@ -16,11 +32,27 @@ const AddContact = () => {
       addressInput.value
     );
   }
+
+  function handleEditUser() {
+    console.log(name, email, phone, address);
+    nameInput.value = name;
+    emailInput.value = email;
+    phoneInput.value = phone;
+    addressInput.value = address;
+    actions.editUser(
+      id,
+      nameInput.value,
+      emailInput.value,
+      phoneInput.value,
+      addressInput.value
+    );
+  }
+
   return (
     <>
       <div className="container">
         <div className="row">
-          <h1>Add a new contact</h1>
+          <h1>{edit == false ? "Add a contact" : "Edit a contact"}</h1>
           <div className="mb-3">
             <label htmlFor="nameInput" className="form-label">
               Name
@@ -71,15 +103,15 @@ const AddContact = () => {
           </div>
         </div>
         <div className="row d-flex justify-content-end">
+          <button className="col-2 ms-3 me-2">
+            <Link to="/">Go back to contact list</Link>
+          </button>
           <button
             type="button"
-            className="col-2 btn btn-primary"
-            onClick={() => handleCreateUser()}
+            className="col-2 btn btn-primary me-3"
+            onClick={() => handleDecide()}
           >
-            Add contact
-          </button>
-          <button type="button" className="col-2 btn btn-success ms-3 me-2">
-            <Link to="/">Go back to contact list</Link>
+            {edit == false ? "Add a contact" : "Edit contact"}
           </button>
         </div>
       </div>

@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     store: {
       urlBase: "https://assets.breatheco.de/apis/fake/contact/",
       demo: {
-        name: "Demo Name",
+        name: "Name",
         location: "USA",
         phoneNumber: "1-800-notarealnumber.com",
         email: "demoemail@gmail.com",
@@ -24,8 +24,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
       changeColor: (index, color) => {
         //get the store
-        const store = getStore();
-        const actions = getActions();
         //we have to loop the entire demo array to look for the respective index
         //and change its color
         const demo = store.demo.map((elm, i) => {
@@ -37,8 +35,8 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({ demo: demo });
       },
       createUser: async (username, userEmail, userPhone, userAddress) => {
-        let store = getStore();
-        let actions = getActions();
+        const store = getStore();
+        const actions = getActions();
         try {
           let response = await fetch(`${store.urlBase}`, {
             method: "POST",
@@ -53,13 +51,21 @@ const getState = ({ getStore, getActions, setStore }) => {
           });
           if (response.ok) {
             actions.getUsers();
+            let nameInput = document.getElementById("nameInput");
+            let emailInput = document.getElementById("emailInput");
+            let phoneInput = document.getElementById("phoneInput");
+            let addressInput = document.getElementById("addressInput");
+            nameInput.value = "";
+            emailInput.value = "";
+            phoneInput.value = "";
+            addressInput.value = "";
           }
         } catch (err) {
           console.log(err);
         }
       },
       getUsers: async () => {
-        let store = getStore();
+        const store = getStore();
         try {
           let response = await fetch(`${store.urlBase}agenda/jz_agenda`);
           let data = await response.json();
@@ -73,14 +79,44 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       deleteUser: async (id) => {
-        let actions = getActions();
-        let store = getStore();
+        const actions = getActions();
+        const store = getStore();
         try {
           let response = await fetch(`${store.urlBase}/${id}`, {
             method: "DELETE",
           });
           if (response.ok) {
             actions.getUsers();
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      editUser: async (id, username, userEmail, userPhone, userAddress) => {
+        const actions = getActions();
+        const store = getStore();
+        try {
+          let response = await fetch(`${store.urlBase}/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              full_name: `${username}`,
+              email: `${userEmail}`,
+              agenda_slug: "jz_agenda",
+              address: `${userAddress}`,
+              phone: `${userPhone}`,
+            }),
+          });
+          if (response.ok) {
+            actions.getUsers();
+            /*             let nameInput = document.getElementById("nameInput");
+            let emailInput = document.getElementById("emailInput");
+            let phoneInput = document.getElementById("phoneInput");
+            let addressInput = document.getElementById("addressInput");
+            nameInput.value = "";
+            emailInput.value = "";
+            phoneInput.value = "";
+            addressInput.value = ""; */
           }
         } catch (error) {
           console.log(error);
