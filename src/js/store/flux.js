@@ -92,7 +92,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(error);
         }
       },
-      editUser: async (id, username, userEmail, userPhone, userAddress) => {
+      editUser: async (username, userEmail, userPhone, userAddress, id) => {
         const actions = getActions();
         const store = getStore();
         try {
@@ -109,14 +109,14 @@ const getState = ({ getStore, getActions, setStore }) => {
           });
           if (response.ok) {
             actions.getUsers();
-            /*             let nameInput = document.getElementById("nameInput");
+            let nameInput = document.getElementById("nameInput");
             let emailInput = document.getElementById("emailInput");
             let phoneInput = document.getElementById("phoneInput");
             let addressInput = document.getElementById("addressInput");
             nameInput.value = "";
             emailInput.value = "";
             phoneInput.value = "";
-            addressInput.value = ""; */
+            addressInput.value = "";
           }
         } catch (error) {
           console.log(error);

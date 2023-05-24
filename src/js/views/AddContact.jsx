@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 
@@ -6,46 +6,28 @@ const AddContact = () => {
   const location = useLocation();
   const { edit, id, name, address, phone, email } = location.state;
   const { actions } = useContext(Context);
-  let nameInput = document.getElementById("nameInput");
-  let emailInput = document.getElementById("emailInput");
-  let phoneInput = document.getElementById("phoneInput");
-  let addressInput = document.getElementById("addressInput");
-
-  /*   nameInput?.value = name;
-  emailInput?.value = email;
-  phoneInput?.value = phone;
-  addressInput?.value = address;  */
 
   function handleDecide() {
+    let nameInput = document.getElementById("nameInput");
+    let emailInput = document.getElementById("emailInput");
+    let phoneInput = document.getElementById("phoneInput");
+    let addressInput = document.getElementById("addressInput");
     if (edit == false) {
-      handleCreateUser();
-    } else {
-      handleEditUser();
+      actions.createUser(
+        nameInput.value,
+        emailInput.value,
+        phoneInput.value,
+        addressInput.value
+      );
+    } else if (edit == true) {
+      actions.editUser(
+        nameInput.value,
+        emailInput.value,
+        phoneInput.value,
+        addressInput.value,
+        id
+      );
     }
-  }
-
-  function handleCreateUser() {
-    actions.createUser(
-      nameInput.value,
-      emailInput.value,
-      phoneInput.value,
-      addressInput.value
-    );
-  }
-
-  function handleEditUser() {
-    console.log(name, email, phone, address);
-    nameInput.value = name;
-    emailInput.value = email;
-    phoneInput.value = phone;
-    addressInput.value = address;
-    actions.editUser(
-      id,
-      nameInput.value,
-      emailInput.value,
-      phoneInput.value,
-      addressInput.value
-    );
   }
 
   return (
@@ -63,6 +45,7 @@ const AddContact = () => {
               className="form-control"
               id="nameInput"
               placeholder="John Doe"
+              defaultValue={name ? name : ""}
             />
           </div>
           <div className="mb-3">
@@ -75,6 +58,7 @@ const AddContact = () => {
               className="form-control"
               id="emailInput"
               placeholder="name@example.com"
+              defaultValue={email ? email : ""}
             />
           </div>
           <div className="mb-3">
@@ -87,6 +71,7 @@ const AddContact = () => {
               className="form-control"
               id="phoneInput"
               placeholder="000-000-0000"
+              defaultValue={phone ? phone : ""}
             />
           </div>
           <div className="mb-3">
@@ -99,6 +84,7 @@ const AddContact = () => {
               className="form-control"
               id="addressInput"
               placeholder="Maracaibo, Zulia, VE"
+              defaultValue={address ? address : ""}
             />
           </div>
         </div>
@@ -109,9 +95,9 @@ const AddContact = () => {
           <button
             type="button"
             className="col-2 btn btn-primary me-3"
-            onClick={() => handleDecide()}
+            onClick={handleDecide}
           >
-            {edit == false ? "Add a contact" : "Edit contact"}
+            {edit == false ? "Add contact" : "Edit contact"}
           </button>
         </div>
       </div>

@@ -54,8 +54,6 @@ const ContactCard = (props) => {
           <i
             className="functions fa-solid fa-trash me-3 fs-5 text-danger"
             type="button"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteModal"
             onClick={handleDeleteUser}
           ></i>
         </div>
